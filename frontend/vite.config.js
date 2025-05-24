@@ -10,6 +10,19 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
+  server: {
+    historyApiFallback: true, // ✅ สำคัญ
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+    headers: {
+      'Content-Security-Policy': "script-src 'self' 'unsafe-eval';"
+    }
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

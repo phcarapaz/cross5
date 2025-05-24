@@ -37,6 +37,9 @@ const submitForm = async () => {
 };
 
 onMounted(() => {
-  if (userId) fetchUser();
+  window.addEventListener('resize', doSomething);
+});
+onUnmounted(() => {
+  window.removeEventListener('resize', doSomething);
 });
 </script>
