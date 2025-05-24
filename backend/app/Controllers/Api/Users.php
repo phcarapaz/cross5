@@ -1,7 +1,6 @@
 <?php
 namespace App\Controllers\Api;
 
-use App\Models\User;
 use App\Models\UserModel;
 use CodeIgniter\RESTful\ResourceController;
 

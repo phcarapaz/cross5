@@ -9,9 +9,8 @@
     </form>
   </div>
 </template>
-
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import axios from '../../axios';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -19,26 +18,41 @@ const form = ref({ name: '', email: '', password: '' });
 const router = useRouter();
 const route = useRoute();
 const userId = route.params.id;
-console.log('userId:', userId);
+
+function doSomething() {
+  console.log('Window resized');
+}
 
 const fetchUser = async () => {
-  const { data } = await axios.get(`/users/${userId}`);
-  form.value = { ...data, password: '' };
+  try {
+    if (!userId) return; // ป้องกันเรียกเมื่อ userId ไม่มีค่า
+    const { data } = await axios.get(`/users/${userId}`);
+    form.value = { ...data, password: '' };
+  } catch (error) {
+    console.error('Fetch user error:', error);
+  }
 };
 
 const submitForm = async () => {
-  console.log('Submitting form:', form.value);
-  if (userId) {
-    await axios.put(`/users/${userId}`, form.value);
-  } else {
-    await axios.post('/users', form.value);
+  try {
+    if (userId) {
+      await axios.put(`/users/${userId}`, form.value);
+    } else {
+      await axios.post('/users', form.value);
+    }
+    router.push('/');
+  } catch (error) {
+    console.error('Submit form error:', error);
   }
-  router.push('/');
 };
 
 onMounted(() => {
+  if (userId) {
+    fetchUser();
+  }
   window.addEventListener('resize', doSomething);
 });
+
 onUnmounted(() => {
   window.removeEventListener('resize', doSomething);
 });
