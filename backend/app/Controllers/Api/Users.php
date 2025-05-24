@@ -15,9 +15,20 @@ class Users extends ResourceController {
        // return $this->respondCreated($data);
 
         $data = $this->request->getJSON(true); // หรือ getPost() ถ้าใช้ form-urlencoded
+        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+
 
         if (!$data || !isset($data['name'], $data['email'], $data['password'])) {
             return $this->response->setStatusCode(400)->setJSON(['error' => 'Invalid input']);
+        }
+        if (!$this->validate([
+            'email' => 'required|valid_email',
+            'name' => 'required',
+            'password' => 'required|min_length[6]'
+            ])) {
+            return $this->response->setStatusCode(400)->setJSON([
+                'error' => $this->validator->getErrors()
+            ]);
         }
 
         $model = new UserModel();
