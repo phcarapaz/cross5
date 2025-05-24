@@ -1,0 +1,4 @@
+# ใน my-webapp/.gitignore
+node_modules/
+vendor/
+.env
