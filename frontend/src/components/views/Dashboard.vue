@@ -6,6 +6,7 @@
     <p v-if="name">Name: {{ name }}</p>
     <button @click="logout">Logout</button>
   </div>
+
 </template>
 
 <script>
