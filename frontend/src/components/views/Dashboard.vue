@@ -1,7 +1,9 @@
 <template>
   <div>
     <h1>Dashboard</h1>
-    <p v-if="message">{{ message }}</p>
+    <p v-if="message">Message: {{ message }}</p>
+    <p v-if="email">Email: {{ email }}</p>
+    <p v-if="name">Name: {{ name }}</p>
     <button @click="logout">Logout</button>
   </div>
 </template>
@@ -12,7 +14,9 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      message: ''
+      message: '',
+      email: '',
+      name: ''
     }
   },
   mounted() {
@@ -28,14 +32,14 @@ export default {
       }
 
       try {
-        const res = await axios.get('http://localhost/backend/index.php/auth/protected_route', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+        const res = await axios.get('http://localhost:8080/api/protected', {
+          headers: { Authorization: `Bearer ${token}` }
         })
 
         if (res.data.status) {
-          this.message = res.data.data
+          this.message = res.data.data.message || 'Welcome!'
+          this.email = res.data.data.email
+          this.name = res.data.data.name
         } else {
           this.message = 'Unauthorized. Redirecting...'
           setTimeout(() => this.$router.push('/'), 1500)
@@ -54,10 +58,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-h1 {
-  font-size: 24px;
-  margin-bottom: 10px;
-}
-</style>

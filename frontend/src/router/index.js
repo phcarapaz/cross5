@@ -3,15 +3,15 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import UserList from '@/components/views/UserList.vue'
 import UserForm from '@/components/views/UserForm.vue'
-import Login from '@/components/views/Login.vue'
 import Dashboard from '@/components/views/Dashboard.vue'
+import LoginForm from '@/components/views/LoginForm.vue'
 
 const routes = [
   { path: '/', component: UserList },
   { path: '/add', component: UserForm },
   { path: '/edit/:id', component: UserForm, props: true },
   { path: '/delete/:id', component: UserForm, props: true },
-  { path: '/login', component: Login },
+  { path: '/login', component: LoginForm },
   {
     path: '/dashboard',
     component: Dashboard,

@@ -1,6 +1,9 @@
 <?php
+namespace App\Libraries;
+
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Exception;
 
 class JwtHandler {
     private $key = 'my_secret_key';

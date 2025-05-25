@@ -44,5 +44,18 @@ class UserModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
     
-    
+    public function check_login($email, $password)
+    {
+        // หา user จาก email
+        $user = $this->where('email', $email)->first();
+
+        if ($user) {
+            // ตรวจสอบ password (สมมติใช้ password_hash)
+            if (password_verify($password, $user['password'])) {
+                return $user;
+            }
+        }
+
+        return false;
+    }
 }

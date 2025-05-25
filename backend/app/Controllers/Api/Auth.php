@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Api;
 use CodeIgniter\Controller;
 use App\Models\UserModel;
-use JwtHandler;
-
+use App\Libraries\JwtHandler;
 class Auth extends Controller
 {
     public function login()
@@ -50,28 +49,34 @@ class Auth extends Controller
     }
 
     public function protected_route()
-    {
-        $request = service('request');
-        $response = service('response');
+{
+    $request = service('request');
+    $response = service('response');
 
-        $jwt = new JwtHandler();
-        $authHeader = $request->getHeaderLine('Authorization');
-        $token = null;
+    $jwt = new JwtHandler();
+    $authHeader = $request->getHeaderLine('Authorization');
+    $token = null;
 
-        if ($authHeader && preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
-            $token = $matches[1];
-        }
-
-        if ($token && $jwt->validate($token)) {
-            return $response->setJSON([
-                'status' => true,
-                'data' => 'Access Granted'
-            ]);
-        } else {
-            return $response->setJSON([
-                'status' => false,
-                'message' => 'Unauthorized'
-            ]);
-        }
+    if ($authHeader && preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
+        $token = $matches[1];
     }
+
+    $decoded = $token ? $jwt->validate($token) : false;
+
+    if ($decoded) {
+        // สมมติเรามี name ใน token ด้วย หรือจะดึงจาก DB ก็ได้
+        return $response->setJSON([
+            'status' => true,
+            'data' => [
+                'email' => $decoded['email'],
+                'name'  => $decoded['name'] ?? 'User' // fallback ถ้าไม่มีชื่อ
+            ]
+        ]);
+    } else {
+        return $response->setJSON([
+            'status' => false,
+            'message' => 'Unauthorized'
+        ]);
+    }
+}
 }

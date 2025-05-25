@@ -7,12 +7,7 @@
       <input v-model="form.email" placeholder="Email" type="email" required />
       <p v-if="emailError" style="color: red">{{ emailError }}</p>
 
-      <input
-        v-model="form.password"
-        type="password"
-        placeholder="Password"
-        :required="!userId"
-      />
+      <input v-model="form.password" type="password" placeholder="Password" :required="!userId"/>
       <p v-if="passwordError" style="color: red">{{ passwordError }}</p>
 
       <button type="submit">Save</button>
