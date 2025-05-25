@@ -20,7 +20,7 @@ export default {
   methods: {
     async login() {
       try {
-        const res = await axios.post('http://localhost/backend/index.php/auth/login', {
+        const res = await axios.post('http://localhost/login', {
           email: this.email,
           password: this.password
         })

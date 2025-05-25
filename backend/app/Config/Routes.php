@@ -7,6 +7,7 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 $routes->resource('api/users', ['controller' => 'Api\Users']);
+$routes->resource('api/auth', ['controller' => 'Api\Auth']);
 $routes->options('api/(:segment)', 'Api\Users::options');
 $routes->options('api/(:any)', function () {
     return service('response')
@@ -15,4 +16,9 @@ $routes->options('api/(:any)', function () {
         ->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
         ->setStatusCode(200);
 });
-
+$routes->group('auth', function($routes) {
+    $routes->post('login', 'Auth::login');
+    $routes->options('login', 'Auth::login'); // สำหรับ preflight CORS request
+    $routes->get('protected', 'Auth::protected_route');
+    $routes->options('protected', 'Auth::protected_route'); // สำหรับ preflight CORS request
+});
